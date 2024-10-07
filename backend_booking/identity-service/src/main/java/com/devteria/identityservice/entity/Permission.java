@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
+import jakarta.persistence.Table;
 @Getter
 @Setter
 @Builder
@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "permissions")
 public class Permission {
     @Id
     String name;

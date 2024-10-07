@@ -16,6 +16,7 @@ export async function filterTrips(from, to, date) {
       URL_TRIP_FILTER,
       tripFilterRequest(from, to, date)
     );
+    console.log("Response data:", response.data);
     return response.data;
   });
 }

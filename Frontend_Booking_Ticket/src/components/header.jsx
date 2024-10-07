@@ -54,7 +54,7 @@ function Header({isLogin, setIsLogin}) {
           </Button>
         </Dropdown>
         <Button type="link" className="font-semibold text-[#2474e5]">
-          Mở bán vé trên BAOKHANG
+          Mở bán vé trên VESXE
         </Button>
         <div className="flex gap-3">
           <Button

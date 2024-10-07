@@ -68,6 +68,8 @@ function Booking() {
       ),
     ];
 
+    console.log("Initial sorted buses:", sortedBuses);
+
     // Filter based on time range
     if (range[0] !== 0 || range[1] !== 24) {
       sortedBuses = sortedBuses.filter((bus) => {
@@ -93,6 +95,7 @@ function Booking() {
       });
     }
 
+    console.log("Sorted buses after filtering:", sortedBuses);
     setSortBuses(sortedBuses);
   }, [tripList, range, filteredBusNames, rangePrice]);
 
@@ -135,9 +138,12 @@ function Booking() {
       const to = params.get("to");
       const date = params.get("date");
 
+      console.log("URL Params:", { from, to, date });
+
       if (from && to && date) {
         try {
           const trips = await filterTrips(from, to, date);
+          console.log("Fetched trips:", trips);
           setTripsContext(trips);
         } catch (error) {
           message.error("Có lỗi xảy ra khi tìm kiếm chuyến đi");
@@ -145,10 +151,12 @@ function Booking() {
       }
     };
 
-    // Fetch trips if context is null
     if (!tripsContext) {
       fetchTrips();
-    } else setTripList(tripsContext);
+    } else {
+      console.log("Trips from context:", tripsContext);
+      setTripList(tripsContext);
+    }
   }, [location.search, tripsContext, setTripsContext]);
 
   return (

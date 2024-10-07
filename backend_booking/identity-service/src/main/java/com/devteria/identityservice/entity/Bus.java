@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "buses")
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -64,18 +64,22 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
 
   const handleSelectFrom = (value, option) => {
     setFrom(value);
-    setFromSlug(option.slug);
+    setFromSlug(option.slug); // Cập nhật fromSlug khi chọn từ AutoComplete
   };
 
   const handleSelectTo = (value, option) => {
     setTo(value);
-    setToSlug(option.slug);
+    setToSlug(option.slug); // Cập nhật toSlug khi chọn từ AutoComplete
   };
 
   const handleSwapLocation = () => {
     const tmp = from;
     setFrom(to);
     setTo(tmp);
+
+    const tmpSlug = fromSlug; // Hoán đổi slug của địa điểm
+    setFromSlug(toSlug);
+    setToSlug(tmpSlug);
   };
 
   const handleSearchClick = async () => {
@@ -93,8 +97,10 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
     }
 
     try {
-      //xữ lý hạn chến click nhiều lần khi slug không thay đổi
+      // Lấy kết quả chuyến đi từ API
       const trips = await filterTrips(fromSlug, toSlug, date);
+      console.log("Trips fetched:", trips); // Thêm log để kiểm tra
+
       setTripsContext(trips);
 
       const queryString = `?from=${encodeURIComponent(
@@ -124,7 +130,7 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
               onChange={handleSelectFrom}
               options={options}
               onSearch={handleSearch}
-              onSelect={handleSelectFrom}
+              onSelect={handleSelectFrom} // Đảm bảo chọn đúng slug khi chọn địa điểm
               placeholder="Nhập tên tỉnh thành"
             >
               <Input
@@ -141,7 +147,7 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
             shape="circle"
             className="absolute top-[10px] -left-2 bg-slate-300 text-[#484848]"
             icon={<SwapOutlined />}
-            onClick={handleSwapLocation}
+            onClick={handleSwapLocation} // Hoán đổi địa điểm xuất phát và nơi đến
           />
         </div>
 
@@ -160,7 +166,7 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
               options={options}
               onChange={handleSelectTo}
               onSearch={handleSearch}
-              onSelect={handleSelectTo}
+              onSelect={handleSelectTo} // Đảm bảo chọn đúng slug khi chọn địa điểm
               placeholder="Nhập tên tỉnh thành"
             >
               <Input
@@ -184,7 +190,7 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
             </Text>
             <DatePicker
               value={date ? dayjs(date) : null}
-              onChange={onChangeDate}
+              onChange={onChangeDate} // Cập nhật ngày khi chọn từ DatePicker
               className="border-none focus-within:border-none focus-within:shadow-none"
             />
           </div>
@@ -193,7 +199,7 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
       <div>
         <Button
           type="primary"
-          onClick={handleSearchClick}
+          onClick={handleSearchClick} // Gọi hàm tìm kiếm khi nhấn vào nút Tìm Kiếm
           className="h-full font-medium text-lg text-[#141414] bg-[#ffd333] w-[148px] hover:!bg-yellow-300 hover:!border-[#ffd333] hover:!text-gray-600"
         >
           Tìm Kiếm

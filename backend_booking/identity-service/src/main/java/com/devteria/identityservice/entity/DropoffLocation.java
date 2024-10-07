@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "dropoffLocations")
 public class DropoffLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

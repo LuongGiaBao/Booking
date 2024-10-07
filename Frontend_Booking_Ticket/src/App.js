@@ -13,7 +13,7 @@ import BookingBox from "./components/BookingBox";
 import BookingConfirm from "./components/bookingConfirm";
 import PaymentMethod from "./components/paymentMethod";
 import Footer from "./components/footer";
-
+import Booking from "./components/Booking";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const { user, setUser } = useUser();
@@ -47,7 +47,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/my-ticket" element={<MyTicket />} />
           <Route path="/info-user" element={<InfoUser />} />
-          <Route path="/booking" element={<BookingBox />} />
+          <Route path="/booking" element={<Booking />} />
           <Route path="/booking-confirm" element={<BookingConfirm />} />
           <Route path="/payment-method" element={<PaymentMethod />} />
         </Routes>

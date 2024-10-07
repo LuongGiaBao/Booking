@@ -214,7 +214,7 @@ function Ticket({ busesCustom }) {
 
           <div className="flex flex-col justify-between items-end">
             <Title level={4} className="!font-bold !text-[#2474e5]">
-              Từ {new Intl.NumberFormat("en-US").format(busesCustom?.priceReal)}{" "}
+              Từ {new Intl.NumberFormat("en-US").format(busesCustom?.priceReal)}
               đ
             </Title>
             <div className="border-[1px] border-[#27ae60] px-2 py-1 rounded w-max relative flash-sale">
