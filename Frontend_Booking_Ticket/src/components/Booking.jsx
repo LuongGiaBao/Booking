@@ -14,7 +14,7 @@ import { filterTrips } from "../services/trip";
 import FilterTime from "./FilterTime";
 import FilterBusName from "./FilterBusName";
 import FilterPrice from "./FilterPrice";
-
+import dayjs from "dayjs";
 const { Title } = Typography;
 
 function Booking() {
@@ -58,34 +58,34 @@ function Booking() {
   ];
 
   useEffect(() => {
-    let sortedBuses = [
-      ...tripList?.flatMap((trip) =>
-        trip?.buses?.map((bus) => ({
-          ...bus,
-          tripId: trip.id,
-          departureTime: trip.departureTime,
-        }))
-      ),
-    ];
-
+    const validTripList = Array.isArray(tripList) ? tripList : [];
+  
+    let sortedBuses = validTripList.flatMap((trip) =>
+      trip?.buses?.map((bus) => ({
+        ...bus,
+        tripId: trip.id,
+        departureTime: trip.departureTime,
+      }))
+    );
+  
     console.log("Initial sorted buses:", sortedBuses);
-
-    // Filter based on time range
+  
+    // Lọc theo khoảng thời gian giờ đi
     if (range[0] !== 0 || range[1] !== 24) {
       sortedBuses = sortedBuses.filter((bus) => {
         const busHour = new Date(bus.departureTime).getHours();
         return busHour >= range[0] && busHour <= range[1];
       });
     }
-
-    // Filter based on selected bus names
+  
+    // Lọc theo tên nhà xe
     if (filteredBusNames.length > 0) {
       sortedBuses = sortedBuses.filter((bus) =>
         filteredBusNames.includes(bus.name)
       );
     }
-
-    // Filter based on price range
+  
+    // Lọc theo giá vé
     if (rangePrice[0] !== 0 || rangePrice[1] !== 1000) {
       sortedBuses = sortedBuses.filter((bus) => {
         return (
@@ -94,10 +94,12 @@ function Booking() {
         );
       });
     }
-
-    console.log("Sorted buses after filtering:", sortedBuses);
-    setSortBuses(sortedBuses);
+  
+    // Nếu không có bus nào sau khi lọc, đặt sortedBuses là mảng rỗng
+    setSortBuses(sortedBuses.length > 0 ? sortedBuses : []);
   }, [tripList, range, filteredBusNames, rangePrice]);
+  
+  
 
   const handleClearFilter = () => {
     setRange([0, 24]);
@@ -137,28 +139,28 @@ function Booking() {
       const from = params.get("from");
       const to = params.get("to");
       const date = params.get("date");
-
-      console.log("URL Params:", { from, to, date });
-
+  
       if (from && to && date) {
         try {
           const trips = await filterTrips(from, to, date);
-          console.log("Fetched trips:", trips);
-          setTripsContext(trips);
+          // Đảm bảo trips luôn là mảng
+          setTripsContext(Array.isArray(trips) ? trips : []);
         } catch (error) {
           message.error("Có lỗi xảy ra khi tìm kiếm chuyến đi");
         }
       }
     };
-
-    if (!tripsContext) {
+  
+    // Gọi API nếu tripsContext không tồn tại hoặc là mảng rỗng
+    if (!tripsContext || tripsContext.length === 0) {
       fetchTrips();
     } else {
-      console.log("Trips from context:", tripsContext);
-      setTripList(tripsContext);
+      // Đảm bảo tripsContext luôn là mảng trước khi gán vào tripList
+      setTripList(Array.isArray(tripsContext) ? tripsContext : []);
     }
   }, [location.search, tripsContext, setTripsContext]);
-
+  
+  
   return (
     <div className="bg-[#f2f2f2]">
       <div className="custom-container pt-4 ">

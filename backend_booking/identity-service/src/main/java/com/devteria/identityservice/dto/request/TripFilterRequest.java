@@ -5,8 +5,7 @@ import java.time.LocalDate;
 public class TripFilterRequest {
     private String departureLocation;
     private String arrivalLocation;
-    private LocalDate creationDate;
-
+    private LocalDate departureDate;  // Sử dụng LocalDate để chỉ lọc theo ngày
 
     public String getDepartureLocation() {
         return departureLocation;
@@ -24,12 +23,11 @@ public class TripFilterRequest {
         this.arrivalLocation = arrivalLocation;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
+    public LocalDate getDepartureDate() {
+        return departureDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 }
-

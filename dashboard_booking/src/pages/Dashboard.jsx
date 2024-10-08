@@ -88,7 +88,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-4 min-h-[620px]">
+    <div className="p-4 min-h-[100vh]">
       <Row gutter={16}>
         {cardData.map((card, index) => (
           <Col span={6} key={index}>
@@ -112,7 +112,7 @@ const Dashboard = () => {
           </Col>
         ))}
       </Row>
-      <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
+      {/* <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
         <Select defaultValue="weekly" onChange={handleChange} className="mb-4">
           <Option value="weekly">Weekly</Option>
           <Option value="monthly">Monthly</Option>
@@ -128,7 +128,7 @@ const Dashboard = () => {
             <Line type="monotone" dataKey="revenue" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
     </div>
   );
 };

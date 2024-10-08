@@ -165,6 +165,12 @@ const Ticket = () => {
       render: (status) => (status ? "Active" : "Inactive"),
     },
     {
+      title: "Creation Date", // Thêm cột Creation Date
+      dataIndex: "creationDate",
+      key: "creationDate",
+      render: (text) => moment(text).format("YYYY-MM-DD"), // Định dạng ngày
+    },
+    {
       title: "User ID",
       key: "userId",
       render: (ticket) => ticket?.user?.id || "No user",

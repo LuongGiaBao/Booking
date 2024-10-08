@@ -343,7 +343,7 @@ function BookingConfirm() {
                   <div className="flex flex-row items-center gap-2">
                     <FaBus />
                     <Text className="!text-sm !font-bold" type="secondary">
-                      {tripCurrent?.creationDate}
+                      {tripCurrent?.departureTime}
                     </Text>
                   </div>
                   <Text className="!text-sm !font-bold text-[#2474e5] underline">
@@ -453,7 +453,7 @@ function BookingConfirm() {
                         <Text className="!font-semibold !text-sm">
                           Dự kiến đón lúc:{" "}
                           {addHoursToDateTime(tripCurrent?.departureTime)} •
-                          {tripCurrent?.creationDate}
+                          {tripCurrent?.departureTime}
                         </Text>
                       </div>
                     </div>

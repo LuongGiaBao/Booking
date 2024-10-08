@@ -24,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,25 +109,33 @@ public class TripService {
     }
 
     public List<TripResponse> filterTrips(TripFilterRequest filterRequest) {
-        List<Trip> allTrips = tripRepository.findAll();
+        if (filterRequest.getDepartureDate() != null) {
+            LocalDate selectedDate = filterRequest.getDepartureDate();
+            LocalDateTime startOfDay = selectedDate.atStartOfDay(); // 00:00:00
+            LocalDateTime endOfDay = selectedDate.atTime(23, 59, 59); // 23:59:59
 
-        List<Trip> filteredTrips = allTrips.stream()
-                .filter(trip -> trip.getDepartureLocation().equalsIgnoreCase(filterRequest.getDepartureLocation()))
-                .filter(trip -> trip.getArrivalLocation().equalsIgnoreCase(filterRequest.getArrivalLocation()))
-                .filter(trip -> trip.getCreationDate().isEqual(filterRequest.getCreationDate()))
-                .collect(Collectors.toList());
+            // Log để kiểm tra thời gian
+            System.out.println("Start of day: " + startOfDay + ", End of day: " + endOfDay);
 
-        filteredTrips.forEach(trip -> {
-            trip.getBuses().forEach(bus -> {
-                List<Seat> filteredSeats = seatRepository.findByTripIdAndBusId(trip.getId(), bus.getId());
-                bus.setSeats(filteredSeats);
+            List<Trip> filteredTrips = tripRepository.findByDepartureTimeBetween(startOfDay, endOfDay);
+
+            // Log kết quả truy vấn
+            filteredTrips.forEach(trip -> {
+                System.out.println("Trip ID: " + trip.getId() + ", Departure Time: " + trip.getDepartureTime());
             });
-        });
 
-        return filteredTrips.stream()
-                .map(tripMapper::toTripResponse)
-                .collect(Collectors.toList());
+            return filteredTrips.stream()
+                    .filter(trip -> trip.getDepartureLocation().equalsIgnoreCase(filterRequest.getDepartureLocation()))
+                    .filter(trip -> trip.getArrivalLocation().equalsIgnoreCase(filterRequest.getArrivalLocation()))
+                    .map(tripMapper::toTripResponse)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
+
+
+
+
 
     public TripResponse updateTrip(Integer tripId, TripUpdateRequest request) {
         Trip trip = tripRepository.findById(tripId)

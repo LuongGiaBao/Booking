@@ -47,8 +47,9 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
   }, [fromValue, toValue, dateValue]);
 
   const onChangeDate = (date, dateString) => {
-    setDate(dateString);
-  };
+    console.log("Selected Date:", date); // Log để kiểm tra ngày
+    setDate(date);
+};
 
   const handleSearch = (value) => {
     const filteredOptions = provinces
@@ -95,22 +96,32 @@ function CustomSearchInput({ fromValue = "", toValue = "", dateValue = null }) {
       message.warning("Bạn chưa chọn ngày đi");
       return;
     }
-
+  
     try {
-      // Lấy kết quả chuyến đi từ API
-      const trips = await filterTrips(fromSlug, toSlug, date);
-      console.log("Trips fetched:", trips); // Thêm log để kiểm tra
-
+      // Định dạng ngày thành YYYY-MM-DD
+      const departureTime = dayjs(date).format("YYYY-MM-DD");
+      
+      // Gọi API để tìm chuyến đi
+      const trips = await filterTrips(fromSlug, toSlug, departureTime);
+      console.log("Trips fetched:", trips);
+  
+      if (trips.length === 0) {
+        message.info("Không tìm thấy chuyến đi nào trong ngày này.");
+      }
+  
       setTripsContext(trips);
-
+  
+      // Điều hướng tới trang kết quả nếu có kết quả
       const queryString = `?from=${encodeURIComponent(
         fromSlug
-      )}&to=${encodeURIComponent(toSlug)}&date=${encodeURIComponent(date)}`;
+      )}&to=${encodeURIComponent(toSlug)}&date=${encodeURIComponent(departureTime)}`;
       navigate(`/booking${queryString}`);
     } catch (error) {
       message.error("Có lỗi xảy ra khi tìm kiếm chuyến đi");
     }
   };
+  
+  
 
   return (
     <div className="flex flex-row gap-4 justify-between">

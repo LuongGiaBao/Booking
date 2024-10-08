@@ -282,7 +282,7 @@ const Bus = () => {
   ];
 
   return (
-    <div className="p-4 min-h-[620px]">
+    <div className="p-4 min-h-[100vh]">
       <Button type="primary" onClick={() => setIsModalOpen(true)}>
         Add Bus
       </Button>
