@@ -24,7 +24,7 @@ import { addHoursToDateTime, bookings } from "../services/api";
 import { useUser } from "../context/UserContext";
 import LoginRegister from "./LoginRegister";
 import { createTicket } from "../services/ticket";
-
+import dayjs from "dayjs";
 const { Option } = Select;
 
 const { Title, Text } = Typography;
@@ -156,7 +156,9 @@ function BookingConfirm() {
     }
   };
   console.log(ticket);
-
+  console.log("Dropoff Location ID:", ticket?.dropoffLocationId);
+  console.log("Dropoff Locations:", tripCurrent?.dropoffLocations);
+  
   return (
     <div className="bg-[#f2f2f2]">
       <div className="custom-container pt-4">
@@ -312,23 +314,23 @@ function BookingConfirm() {
                   Tạm tính
                 </Title>
                 <Title level={4} className="!font-bold !my-0 !text-lg">
-                  {new Intl.NumberFormat("en-US").format(ticket?.price)} đ
+                {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(ticket?.price)} đ
                 </Title>
               </div>
               <div className="flex flex-row justify-between items-start mt-3">
-                <Text className="!text-base">Giá vé</Text>
-                <div className="flex flex-col items-end">
-                  <Text className="!font-semibold !text-base">
-                    {new Intl.NumberFormat("en-US").format(
-                      busCurrent?.priceReal * ticket?.seatIds?.length
-                    )}{" "}
-                    đ
-                  </Text>
-                  <Text className="!text-sm" type="secondary">
-                    Mã ghế/giường: {ticket?.seatIds?.join(" , ")}
-                  </Text>
-                </div>
-              </div>
+  <Text className="!text-base">Giá vé</Text>
+  <div className="flex flex-col items-end">
+    <Text className="!font-semibold !text-base">
+      {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
+        busCurrent?.priceReal * ticket?.seatIds?.length
+      )}
+    </Text>
+    <Text className="!text-sm" type="secondary">
+      Mã ghế/giường: {ticket?.seatIds?.join(" , ")}
+    </Text>
+  </div>
+</div>
+
             </div>
             <div className="bg-white p-4 rounded-xl  border border-gray-200">
               <Title level={4} className="!font-bold !my-0 !text-lg">
@@ -436,26 +438,17 @@ function BookingConfirm() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-                        <Text className=" !text-sm">
-                          {
-                            tripCurrent?.pickupLocations[
-                              ticket?.pickupLocationId - 1
-                            ]?.name
-                          }
-                        </Text>
-                        <Text className="!text-xs" type="secondary">
-                          {
-                            tripCurrent?.pickupLocations[
-                              ticket?.pickupLocationId - 1
-                            ]?.address
-                          }
-                        </Text>
-                        <Text className="!font-semibold !text-sm">
-                          Dự kiến đón lúc:{" "}
-                          {addHoursToDateTime(tripCurrent?.departureTime)} •
-                          {tripCurrent?.departureTime}
-                        </Text>
-                      </div>
+  <Text className=" !text-sm">
+    {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.name}
+  </Text>
+  <Text className="!text-xs" type="secondary">
+    {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.address}
+  </Text>
+  <Text className="!font-semibold !text-sm">
+    Dự kiến đón lúc: {addHoursToDateTime(tripCurrent?.departureTime )} {/* Chỉ giờ */} • {tripCurrent?.departureTime}
+  </Text>
+</div>
+
                     </div>
                     <div>
                       <div className="flex flex-row items-center justify-between">
@@ -476,93 +469,74 @@ function BookingConfirm() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-                        <Text className="!text-sm">
-                          {
-                            tripCurrent?.dropoffLocations[
-                              ticket?.pickupLocationId - 1
-                            ]?.name
-                          }
-                        </Text>
-                        <Text className="!text-xs" type="secondary">
-                          {
-                            tripCurrent?.dropoffLocations[
-                              ticket?.dropoffLocationId - 1
-                            ]?.address
-                          }
-                        </Text>
+                      <Text className="!font-semibold !text-sm">
+            {tripCurrent?.dropoffLocations[0]?.name
+              ? tripCurrent?.dropoffLocations[0]?.name
+              : "Không có thông tin điểm trả"}
+          </Text>
+          <Text className="!text-xs" type="secondary">
+            {tripCurrent?.dropoffLocations[0]?.address
+              ? tripCurrent?.dropoffLocations[0]?.address
+              : "Không có địa chỉ"}
+          </Text>
                         <Text className="!font-semibold !text-sm">
-                          Dự kiến trả lúc:{" "}
-                          {addHoursToDateTime(
-                            tripCurrent?.departureTime,
-                            tripCurrent?.travelTime
-                          )}{" "}
-                          •{tripCurrent?.creationDate}
-                        </Text>
+  Dự kiến trả lúc: {addHoursToDateTime(tripCurrent?.departureTime, tripCurrent?.travelTime)} {/* Chỉ giờ */}
+</Text>
+
                       </div>
                     </div>
                   </div>
                 </Drawer>
                 <Divider className="mt-2 mb-6" />
                 <Timeline
-                  mode="left"
-                  items={[
-                    {
-                      label: (
-                        <Text className="!font-bold !text-xl">
-                          {addHoursToDateTime(tripCurrent?.departureTime)}
-                        </Text>
-                      ),
-                      children: (
-                        <div className="flex flex-col">
-                          <Text className="!font-semibold !text-sm">
-                            {
-                              tripCurrent?.pickupLocations[
-                                ticket?.pickupLocationId - 1
-                              ]?.name
-                            }
-                          </Text>
-                          <Text className="!text-xs" type="secondary">
-                            {
-                              tripCurrent?.pickupLocations[
-                                ticket?.pickupLocationId - 1
-                              ]?.address
-                            }
-                          </Text>
-                        </div>
-                      ),
-                    },
-                    {
-                      label: (
-                        <Text className="!font-bold !text-xl">
-                          {addHoursToDateTime(
-                            tripCurrent?.departureTime,
-                            tripCurrent?.travelTime
-                          )}
-                        </Text>
-                      ),
-                      dot: <AiOutlineEnvironment className="text-[#eb5757]" />,
-                      color: "#707070",
-                      children: (
-                        <div className="flex flex-col">
-                          <Text className="!font-semibold !text-sm">
-                            {
-                              tripCurrent?.dropoffLocations[
-                                ticket?.dropoffLocationId - 1
-                              ]?.name
-                            }
-                          </Text>
-                          <Text className="!text-xs" type="secondary">
-                            {
-                              tripCurrent?.dropoffLocations[
-                                ticket?.dropoffLocationId - 1
-                              ]?.address
-                            }
-                          </Text>
-                        </div>
-                      ),
-                    },
-                  ]}
-                />
+  mode="left"
+  items={[
+    {
+      label: (
+        <Text className="!font-bold !text-xl">
+          {addHoursToDateTime(tripCurrent?.departureTime)}
+        </Text>
+      ),
+      children: (
+        <div className="flex flex-col">
+          <Text className="!font-semibold !text-sm">
+            {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.name || "Không có thông tin điểm đón"}
+          </Text>
+          <Text className="!text-xs" type="secondary">
+            {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.address || "Không có địa chỉ"}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      label: (
+        <Text className="!font-bold !text-xl">
+          {addHoursToDateTime(
+            tripCurrent?.departureTime,
+            tripCurrent?.travelTime
+          )}
+        </Text>
+      ),
+      dot: <AiOutlineEnvironment className="text-[#eb5757]" />,
+      color: "#707070",
+      children: (
+        <div className="flex flex-col">
+          <Text className="!font-semibold !text-sm">
+            {tripCurrent?.dropoffLocations[0]?.name
+              ? tripCurrent?.dropoffLocations[0]?.name
+              : "Không có thông tin điểm trả"}
+          </Text>
+          <Text className="!text-xs" type="secondary">
+            {tripCurrent?.dropoffLocations[0]?.address
+              ? tripCurrent?.dropoffLocations[0]?.address
+              : "Không có địa chỉ"}
+          </Text>
+        </div>
+      ),
+    },
+  ]}
+/>
+
                 <Modal
                   title="Thay đổi điểm đón/chờ"
                   centered

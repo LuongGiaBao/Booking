@@ -3,7 +3,7 @@ import hero2 from "../assets/images/hero2.png";
 import hero3 from "../assets/images/hero3.png";
 import hero4 from "../assets/images/hero4.png";
 import { Alert, Tabs, Typography } from "antd";
-
+import dayjs from "dayjs";
 const { Title, Text } = Typography;
 
 export const getBusPopulor = () => {
@@ -68,11 +68,11 @@ export const getBusPopulor = () => {
   return response;
 };
 
-export function addHoursToDateTime(dateTimeString, hoursToAdd = 0) {
-  const date = new Date(dateTimeString);
-  date.setHours(date.getHours() + hoursToAdd);
-  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
+// Cộng thêm số giờ và chỉ trả về phần giờ phút
+export const addHoursToDateTime = (time, travelTime = 0) => {
+  const hoursToAdd = parseFloat(travelTime); // Chuyển đổi travelTime thành số nếu cần thiết
+  return dayjs(time).add(hoursToAdd, 'hour').format('HH:mm'); // Chỉ lấy giờ và phút
+};
 
 export function getCurrentDate() {
   const today = new Date();

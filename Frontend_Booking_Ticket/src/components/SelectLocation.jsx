@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import { useTicket } from "../context/TicketContext";
 import { addHoursToDateTime } from "../services/api";
-
+import dayjs from "dayjs";
 const { Title, Text } = Typography;
 
 function SelectLocation({
@@ -17,7 +17,11 @@ function SelectLocation({
   const [valueStart, setValueStart] = useState(0);
   const [valueEnd, setValueEnd] = useState(0);
   const { ticket, setTicket } = useTicket();
-
+  // Cộng số giờ vào thời gian khởi hành và chỉ trả về giờ
+ const addHoursToDateTime = (time, travelTime = 0) => {
+  const hoursToAdd = parseFloat(travelTime); // travelTime phải là số
+  return dayjs(time).add(hoursToAdd, 'hour').format('HH:mm'); // Chỉ lấy giờ và phút
+};
   useEffect(() => {
     console.log("gia tri nhan vao", valueEndItem, valueEndItem);
     setValueStart(valueStartItem);
@@ -45,6 +49,8 @@ function SelectLocation({
       dropoffLocationId: placeEnd[e.target.value]?.id,
     }));
   };
+  
+
 
   return (
     <div className="flex flex-row">
@@ -56,29 +62,30 @@ function SelectLocation({
           <Text>Xem điểm đón gần bạn nhất?</Text>
         </div>
         <div className="p-4">
-          <Radio.Group onChange={onChangeStart} value={valueStart}>
-            <Space direction="vertical">
-              {placeStart &&
-                placeStart.map((item, index) => {
-                  return (
-                    <Radio value={index} key={index}>
-                      <Title
-                        level={5}
-                        className="!text-[#0060c4] !font-bold !mb-0"
-                      >
-                        {addHoursToDateTime(time)} - {item?.name}
-                      </Title>
-                      <div className="flex flex-row items-start gap-1">
-                        <div>
-                          <AiOutlineEnvironment className="w-3 h-3 mt-1" />
-                        </div>
-                        <Text>{item?.address}</Text>
-                      </div>
-                    </Radio>
-                  );
-                })}
-            </Space>
-          </Radio.Group>
+        <Radio.Group onChange={onChangeStart} value={valueStart}>
+  <Space direction="vertical">
+    {placeStart &&
+      placeStart.map((item, index) => {
+        return (
+          <Radio value={index} key={index}>
+            <Title
+              level={5}
+              className="!text-[#0060c4] !font-bold !mb-0"
+            >
+              {addHoursToDateTime(time)} - {item?.name} {/* Chỉ giờ */}
+            </Title>
+            <div className="flex flex-row items-start gap-1">
+              <div>
+                <AiOutlineEnvironment className="w-3 h-3 mt-1" />
+              </div>
+              <Text>{item?.address}</Text>
+            </div>
+          </Radio>
+        );
+      })}
+  </Space>
+</Radio.Group>
+
         </div>
       </div>
       <div>
@@ -93,29 +100,30 @@ function SelectLocation({
           <Text>Xem điểm trả gần bạn nhất?</Text>
         </div>
         <div className="p-4">
-          <Radio.Group onChange={onChangeEnd} value={valueEnd}>
-            <Space direction="vertical">
-              {placeEnd &&
-                placeEnd.map((item, index) => {
-                  return (
-                    <Radio value={index} key={index}>
-                      <Title
-                        level={5}
-                        className="!text-[#0060c4] !font-bold !mb-0"
-                      >
-                        {addHoursToDateTime(time, travelTime)} - {item?.name}
-                      </Title>
-                      <div className="flex flex-row items-start gap-1">
-                        <div>
-                          <AiOutlineEnvironment className="w-3 h-3 mt-1" />
-                        </div>
-                        <Text>{item?.address}</Text>
-                      </div>
-                    </Radio>
-                  );
-                })}
-            </Space>
-          </Radio.Group>
+        <Radio.Group onChange={onChangeEnd} value={valueEnd}>
+  <Space direction="vertical">
+    {placeEnd &&
+      placeEnd.map((item, index) => {
+        return (
+          <Radio value={index} key={index}>
+            <Title
+              level={5}
+              className="!text-[#0060c4] !font-bold !mb-0"
+            >
+              {addHoursToDateTime(time, travelTime)} - {item?.name} {/* Chỉ giờ */}
+            </Title>
+            <div className="flex flex-row items-start gap-1">
+              <div>
+                <AiOutlineEnvironment className="w-3 h-3 mt-1" />
+              </div>
+              <Text>{item?.address}</Text>
+            </div>
+          </Radio>
+        );
+      })}
+  </Space>
+</Radio.Group>
+
         </div>
       </div>
     </div>

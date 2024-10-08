@@ -17,6 +17,7 @@ import LocationBus from "./LocationBus";
 import GatingBus from "./GatingBus";
 import PictureBus from "./PictureBus";
 import PolicyBus from "./PolicyBus";
+import dayjs from "dayjs";
 import {
   addHoursToDateTime,
   getCurrentDate,
@@ -50,8 +51,21 @@ function Ticket({ busesCustom }) {
       (booking) => Number(booking?.id) === Number(busesCustom?.tripId)
     );
     setTripItem(tripOfBus);
-  }, [tripItem]);
+  
+    if (tripOfBus) {
+      console.log("Trip Item Departure Time: ", tripOfBus.departureTime);
+      console.log("Trip Item Travel Time: ", tripOfBus.travelTime);
+    }
+  }, [tripsContext, busesCustom?.tripId]);
 
+  const addHoursToDateTime = (departureTime, travelTime) => {
+    const hoursToAdd = parseFloat(travelTime); // Đảm bảo travelTime là số
+    return dayjs(departureTime).add(hoursToAdd, 'hour').format('HH:mm'); // Định dạng chỉ lấy giờ và phút
+  };
+  
+  // Tính toán giờ đến dự kiến
+  const formattedArrivalTime = addHoursToDateTime(tripItem?.departureTime, tripItem?.travelTime);
+  console.log("Arrival Time:", formattedArrivalTime); // Log để kiểm tra
   const handleAddTime = () => {
     setTicket((prevTicket) => ({
       ...prevTicket,
@@ -184,28 +198,26 @@ function Ticket({ busesCustom }) {
             </div>
             <Text>Loại xe: {busesCustom?.type}</Text>
             <div className="relative">
-              <Timeline
-                items={[
-                  {
-                    color: "#484848",
-                    children: (
-                      <>{`${addHoursToDateTime(busesCustom?.departureTime)} • ${
-                        tripItem?.pickupLocations[0]?.name
-                      }`}</>
-                    ),
-                  },
-                  {
-                    dot: <AiOutlineEnvironment />,
-                    color: "#707070",
-                    children: (
-                      <>{`${addHoursToDateTime(
-                        tripItem?.departureTime,
-                        tripItem?.travelTime
-                      )} • ${tripItem?.dropoffLocations[0]?.name}`}</>
-                    ),
-                  },
-                ]}
-              />
+            <Timeline
+  items={[
+    {
+      color: "#484848",
+      children: (
+        <>{`${dayjs(busesCustom?.departureTime).format('HH:mm')} • ${tripItem?.pickupLocations[0]?.name}`}</>
+      ),
+    },
+    {
+      dot: <AiOutlineEnvironment />,
+      color: "#707070",
+      children: (
+        <>
+          {`${formattedArrivalTime} • ${tripItem?.dropoffLocations[0]?.name}`}
+        </>
+      ),
+    },
+  ]}
+/>
+
               <Text className="absolute left-0 bottom-0" type="secondary">
                 Thời gian: {tripItem?.travelTime} Giờ
               </Text>
