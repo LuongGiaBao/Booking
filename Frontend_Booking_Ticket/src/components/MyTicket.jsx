@@ -54,7 +54,7 @@ function MyTicket() {
                         currency: "VND",
                       }).format(ticket.price)}
                     </p>
-                    {ticket.discount > 0 && <p className="text-sm">Giảm giá: {ticket.discount}%</p>}
+                    {/* {ticket.discount > 0 && <p className="text-sm">Giảm giá: {ticket.discount}%</p>} */}
                   </div>
                 </div>
 
@@ -66,8 +66,14 @@ function MyTicket() {
                       Điểm đón: {ticket.pickupLocation?.name || ticket.pickupLocation?.id}
                     </p>
                     <p className="flex items-center">
+                       {ticket.pickupLocation?.address || ticket.pickupLocation?.id}
+                    </p>
+                    <p className="flex items-center">
                       <FaMapMarkerAlt className="mr-2 text-blue-500" /> 
                       Điểm trả: {ticket.dropoffLocation?.name || ticket.dropoffLocation?.id}
+                    </p>
+                    <p className="flex items-center">
+                       {ticket.dropoffLocation?.address || ticket.dropoffLocation?.id}
                     </p>
                   </div>
                   <div className="text-sm">
