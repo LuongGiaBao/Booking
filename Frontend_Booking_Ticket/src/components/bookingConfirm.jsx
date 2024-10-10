@@ -7,7 +7,6 @@ import {
   Drawer,
   message,
   Modal,
-  Radio,
   Timeline,
 } from "antd";
 import { Typography } from "antd";
@@ -63,12 +62,6 @@ function BookingConfirm() {
 
   const [form] = Form.useForm();
 
-  // useEffect(() => {
-  //   if (tripCurrent === null) {
-  //     navigate("/");
-  //   }
-  // }, [tripCurrent, navigate]);
-
   useEffect(() => {
     if (user) {
       form.setFieldsValue({
@@ -92,14 +85,23 @@ function BookingConfirm() {
       );
 
       const myBus = myTrip?.buses?.find(
-        (item) => Number(item?.id) === ticket?.busId
+        (item) => Number(item?.id) === Number(ticket?.busSelectedId)
       );
+      
+      console.log("ticket.busSelectedId:", ticket?.busSelectedId); // Kiểm tra giá trị của busSelectedId
+      console.log("myBus:", myBus); // Kiểm tra nếu bus được tìm thấy
+      
+
+      console.log("myTrip:", myTrip);  // Kiểm tra giá trị của myTrip
+      console.log("myBus:", myBus);    // Kiểm tra giá trị của myBus
+      console.log("ticket:", ticket);  // Kiểm tra giá trị của ticket
+      
 
       setTripCurrent(myTrip);
       setBusCurrent(myBus);
     }
     if (tripsContext === null) navigate("/");
-  }, [tripCurrent, busCurrent]);
+  }, [tripsContext, ticket]);
 
   const handleChangeEmail = (e) => {
     form.setFieldsValue({ email: e.target.value });
@@ -138,15 +140,18 @@ function BookingConfirm() {
         ...prevTicket,
         userId: user.id,
       }));
-
+  
       try {
         const ticketCreationRequest = {
           ...ticket,
           userId: user.id,
         };
-
-        await createTicket(ticketCreationRequest);
+  
+        await createTicket(ticketCreationRequest); // Giả định gọi API để tạo vé
         message.success("Mua vé thành công!!!");
+  
+        // Chuyển hướng sau khi thành công
+        navigate("/my-ticket"); // Chuyển người dùng tới trang MyTicket
       } catch (error) {
         console.error("Lỗi khi tạo vé:", error);
         message.error("Đã xảy ra lỗi. Vui lòng thử lại.");
@@ -155,10 +160,15 @@ function BookingConfirm() {
       message.warning("Vui lòng đăng nhập để tiện theo dõi vé!");
     }
   };
-  console.log(ticket);
-  console.log("Dropoff Location ID:", ticket?.dropoffLocationId);
-  console.log("Dropoff Locations:", tripCurrent?.dropoffLocations);
-  
+
+  // Kiểm tra dữ liệu trước khi tính toán giá
+  const totalPrice = busCurrent && ticket?.seatIds?.length
+    ? busCurrent.priceReal * ticket.seatIds.length
+    : 0;
+
+  console.log("busCurrent?.priceReal:", busCurrent?.priceReal); // Log kiểm tra giá
+  console.log("ticket?.seatIds.length:", ticket?.seatIds?.length); // Log kiểm tra số ghế
+
   return (
     <div className="bg-[#f2f2f2]">
       <div className="custom-container pt-4">
@@ -314,23 +324,30 @@ function BookingConfirm() {
                   Tạm tính
                 </Title>
                 <Title level={4} className="!font-bold !my-0 !text-lg">
-                {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(ticket?.price)} đ
+                  {totalPrice > 0
+                    ? new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(totalPrice)
+                    : "Chưa có thông tin giá"} đ
                 </Title>
               </div>
               <div className="flex flex-row justify-between items-start mt-3">
-  <Text className="!text-base">Giá vé</Text>
-  <div className="flex flex-col items-end">
-    <Text className="!font-semibold !text-base">
-      {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
-        busCurrent?.priceReal * ticket?.seatIds?.length
-      )}
-    </Text>
-    <Text className="!text-sm" type="secondary">
-      Mã ghế/giường: {ticket?.seatIds?.join(" , ")}
-    </Text>
-  </div>
-</div>
-
+                <Text className="!text-base">Giá vé</Text>
+                <div className="flex flex-col items-end">
+                  <Text className="!font-semibold !text-base">
+                    {totalPrice > 0
+                      ? new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(totalPrice)
+                      : "Chưa có thông tin giá"}
+                  </Text>
+                  <Text className="!text-sm" type="secondary">
+                    Mã ghế/giường: {ticket?.seatIds?.join(" , ")}
+                  </Text>
+                </div>
+              </div>
             </div>
             <div className="bg-white p-4 rounded-xl  border border-gray-200">
               <Title level={4} className="!font-bold !my-0 !text-lg">
@@ -438,17 +455,22 @@ function BookingConfirm() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-  <Text className=" !text-sm">
-    {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.name}
-  </Text>
-  <Text className="!text-xs" type="secondary">
-    {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.address}
-  </Text>
-  <Text className="!font-semibold !text-sm">
-    Dự kiến đón lúc: {addHoursToDateTime(tripCurrent?.departureTime )} {/* Chỉ giờ */} • {tripCurrent?.departureTime}
-  </Text>
-</div>
-
+                        <Text className=" !text-sm">
+                          {tripCurrent?.pickupLocations[
+                            ticket?.pickupLocationId - 1
+                          ]?.name}
+                        </Text>
+                        <Text className="!text-xs" type="secondary">
+                          {tripCurrent?.pickupLocations[
+                            ticket?.pickupLocationId - 1
+                          ]?.address}
+                        </Text>
+                        <Text className="!font-semibold !text-sm">
+                          Dự kiến đón lúc:{" "}
+                          {addHoursToDateTime(tripCurrent?.departureTime)} •{" "}
+                          {tripCurrent?.departureTime}
+                        </Text>
+                      </div>
                     </div>
                     <div>
                       <div className="flex flex-row items-center justify-between">
@@ -469,73 +491,81 @@ function BookingConfirm() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-                      <Text className="!font-semibold !text-sm">
-            {tripCurrent?.dropoffLocations[0]?.name
-              ? tripCurrent?.dropoffLocations[0]?.name
-              : "Không có thông tin điểm trả"}
-          </Text>
-          <Text className="!text-xs" type="secondary">
-            {tripCurrent?.dropoffLocations[0]?.address
-              ? tripCurrent?.dropoffLocations[0]?.address
-              : "Không có địa chỉ"}
-          </Text>
                         <Text className="!font-semibold !text-sm">
-  Dự kiến trả lúc: {addHoursToDateTime(tripCurrent?.departureTime, tripCurrent?.travelTime)} {/* Chỉ giờ */}
-</Text>
-
+                          {tripCurrent?.dropoffLocations[0]?.name
+                            ? tripCurrent?.dropoffLocations[0]?.name
+                            : "Không có thông tin điểm trả"}
+                        </Text>
+                        <Text className="!text-xs" type="secondary">
+                          {tripCurrent?.dropoffLocations[0]?.address
+                            ? tripCurrent?.dropoffLocations[0]?.address
+                            : "Không có địa chỉ"}
+                        </Text>
+                        <Text className="!font-semibold !text-sm">
+                          Dự kiến trả lúc:{" "}
+                          {addHoursToDateTime(
+                            tripCurrent?.departureTime,
+                            tripCurrent?.travelTime
+                          )}{" "}
+                          {/* Chỉ giờ */}
+                        </Text>
                       </div>
                     </div>
                   </div>
                 </Drawer>
                 <Divider className="mt-2 mb-6" />
                 <Timeline
-  mode="left"
-  items={[
-    {
-      label: (
-        <Text className="!font-bold !text-xl">
-          {addHoursToDateTime(tripCurrent?.departureTime)}
-        </Text>
-      ),
-      children: (
-        <div className="flex flex-col">
-          <Text className="!font-semibold !text-sm">
-            {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.name || "Không có thông tin điểm đón"}
-          </Text>
-          <Text className="!text-xs" type="secondary">
-            {tripCurrent?.pickupLocations[ticket?.pickupLocationId - 1]?.address || "Không có địa chỉ"}
-          </Text>
-        </div>
-      ),
-    },
-    {
-      label: (
-        <Text className="!font-bold !text-xl">
-          {addHoursToDateTime(
-            tripCurrent?.departureTime,
-            tripCurrent?.travelTime
-          )}
-        </Text>
-      ),
-      dot: <AiOutlineEnvironment className="text-[#eb5757]" />,
-      color: "#707070",
-      children: (
-        <div className="flex flex-col">
-          <Text className="!font-semibold !text-sm">
-            {tripCurrent?.dropoffLocations[0]?.name
-              ? tripCurrent?.dropoffLocations[0]?.name
-              : "Không có thông tin điểm trả"}
-          </Text>
-          <Text className="!text-xs" type="secondary">
-            {tripCurrent?.dropoffLocations[0]?.address
-              ? tripCurrent?.dropoffLocations[0]?.address
-              : "Không có địa chỉ"}
-          </Text>
-        </div>
-      ),
-    },
-  ]}
-/>
+                  mode="left"
+                  items={[
+                    {
+                      label: (
+                        <Text className="!font-bold !text-xl">
+                          {addHoursToDateTime(tripCurrent?.departureTime)}
+                        </Text>
+                      ),
+                      children: (
+                        <div className="flex flex-col">
+                          <Text className="!font-semibold !text-sm">
+                            {tripCurrent?.pickupLocations[
+                              ticket?.pickupLocationId - 1
+                            ]?.name || "Không có thông tin điểm đón"}
+                          </Text>
+                          <Text className="!text-xs" type="secondary">
+                            {tripCurrent?.pickupLocations[
+                              ticket?.pickupLocationId - 1
+                            ]?.address || "Không có địa chỉ"}
+                          </Text>
+                        </div>
+                      ),
+                    },
+                    {
+                      label: (
+                        <Text className="!font-bold !text-xl">
+                          {addHoursToDateTime(
+                            tripCurrent?.departureTime,
+                            tripCurrent?.travelTime
+                          )}
+                        </Text>
+                      ),
+                      dot: <AiOutlineEnvironment className="text-[#eb5757]" />,
+                      color: "#707070",
+                      children: (
+                        <div className="flex flex-col">
+                          <Text className="!font-semibold !text-sm">
+                            {tripCurrent?.dropoffLocations[0]?.name
+                              ? tripCurrent?.dropoffLocations[0]?.name
+                              : "Không có thông tin điểm trả"}
+                          </Text>
+                          <Text className="!text-xs" type="secondary">
+                            {tripCurrent?.dropoffLocations[0]?.address
+                              ? tripCurrent?.dropoffLocations[0]?.address
+                              : "Không có địa chỉ"}
+                          </Text>
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
 
                 <Modal
                   title="Thay đổi điểm đón/chờ"
