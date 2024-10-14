@@ -23,9 +23,7 @@ const items = [
   },
 ];
 
-function Header({isLogin, setIsLogin}) {
-  
-
+function Header({ isLogin, setIsLogin }) {
   return (
     <div className="px-5 py-2 flex flex-row items-center justify-between bg-white border-b border-sky-400">
       <Link to="/" className="w-[148px] h-[60px] block">
@@ -36,9 +34,11 @@ function Header({isLogin, setIsLogin}) {
         />
       </Link>
       <div className="flex flex-row items-center">
-        <Button type="link" className="font-semibold text-[#2474e5]">
-          Đơn hàng của tôi
-        </Button>
+        <Link to="/my-ticket">
+          <Button type="link" className="font-semibold text-[#2474e5]">
+            Đơn hàng của tôi
+          </Button>
+        </Link>
         <Dropdown
           menu={{
             items,
@@ -57,14 +57,16 @@ function Header({isLogin, setIsLogin}) {
           Mở bán vé trên VESXE
         </Button>
         <div className="flex gap-3">
-          <Button
-            type="primary"
-            icon={<PhoneOutlined />}
-            iconPosition="start"
-            className="font-semibold"
-          >
-            Hotline 24/7
-          </Button>
+          <Link to="tel:0932015536" target="_blank">
+            <Button
+              type="primary"
+              icon={<PhoneOutlined />}
+              iconPosition="start"
+              className="font-semibold"
+            >
+              Hotline 24/7
+            </Button>
+          </Link>
           {isLogin ? <User setIsLogin={setIsLogin} /> : <LoginRegister />}
         </div>
       </div>
