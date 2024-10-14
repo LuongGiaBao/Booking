@@ -10,6 +10,9 @@ import Trip from "./pages/Trip";
 import Seat from "./pages/Seat";
 import Ticket from "./pages/Ticket";
 import Login from "./pages/Login";
+import PromotionList from "./pages/PromotionList";
+import TicketPrices from "./pages/TicketPrices";
+// import Invoices from "./pages/invoices";
 
 const App = () => {
   return (
@@ -80,7 +83,66 @@ const App = () => {
             </Layout>
           }
         />
+        <Route
+          path="/promotions"
+          element={
+            <Layout>
+              <PromotionList />
+            </Layout>
+          }
+        />
+        <Route
+          path="/ticket-prices"
+          element={
+            <Layout>
+              <TicketPrices />
+            </Layout>
+          }
+        />
       </Routes>
+
+      {/* <Route
+        path="/invoices"
+        element={
+          <Layout>
+            <Invoices />
+          </Layout>
+        }
+      /> */}
+
+      {/* <Route
+        path="/invoices/new"
+        element={
+          <Layout>
+            <InvoiceCreate />
+          </Layout>
+        }
+      /> */}
+      {/* <Route
+        path="/invoices/:id"
+        element={
+          <Layout>
+            <InvoiceDetail />
+          </Layout>
+        }
+      /> */}
+
+      {/* <Route
+        path="/promotions/new"
+        element={
+          <Layout>
+            <PromotionCreate />
+          </Layout>
+        }
+      /> */}
+      {/* <Route
+        path="/promotions/:id"
+        element={
+          <Layout>
+            <PromotionDetail />
+          </Layout>
+        }
+      /> */}
     </Router>
   );
 };

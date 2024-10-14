@@ -56,6 +56,16 @@ const SidebarComponent = () => {
             Ticket
           </Link>
         </Menu.Item>
+        <Menu.Item key="9">
+          <Link to="/promotions" className="font-medium">
+            Promotion
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="10">
+          <Link to="/ticket-prices" className="font-medium">
+            TicketPrices
+          </Link>
+        </Menu.Item>
       </Menu>
     </aside>
   );

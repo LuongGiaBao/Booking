@@ -6,7 +6,6 @@ import {
   Form,
   Input,
   Select,
-  DatePicker,
   message,
 } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
@@ -32,7 +31,7 @@ const Ticket = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
-  console.log(tickets);
+
   const handleAddTicket = async (values) => {
     setIsLoading(true);
     try {
@@ -46,7 +45,6 @@ const Ticket = () => {
       setIsModalOpen(false);
       form.resetFields();
       message.success("Ticket added successfully!");
-      console.log("New Ticket:", addedTicket);
     } catch (error) {
       console.error("Failed to add ticket:", error);
       message.error("Failed to add ticket!");
@@ -69,7 +67,6 @@ const Ticket = () => {
       setIsEditModalOpen(false);
       setSelectedTicket(null);
       message.success("Ticket updated successfully!");
-      console.log("Updated Ticket:", result);
     } catch (error) {
       console.error("Failed to update ticket:", error);
       message.error("Failed to update ticket!");
@@ -107,12 +104,8 @@ const Ticket = () => {
       dropoffLocationId: ticket.dropoffLocation?.id,
       seatIds: ticket.seats?.map((seat) => seat.id),
     });
-    // console.log("ticket item ", ticket.trip.buses[ticket.busSelectedId]);
-
     setSeatsOfTicket(ticket.trip.buses.seats || ticket.seats);
-
     setIsEditModalOpen(true);
-    form.setFieldsValue(ticket);
   };
 
   // Open Read Modal
@@ -121,18 +114,17 @@ const Ticket = () => {
       title: "Ticket Information",
       content: (
         <div>
-          <p>Price: {new Intl.NumberFormat("en-US").format(ticket?.price)} đ</p>
-          <p>Discount: ${ticket?.discount}</p>
-          <p>Status: {ticket?.status ? "Active" : "Inactive"}</p>
           <p>User ID: {ticket?.user.id}</p>
           <p>Trip ID: {ticket?.trip.id}</p>
           <p>Bus ID: {ticket?.busSelectedId}</p>
+          <p>Price: {new Intl.NumberFormat("en-US").format(ticket?.price)} đ</p>
+          <p>Discount: ${ticket?.discount}</p>
+          <p>Status: {ticket?.status ? "Active" : "Inactive"}</p>
           <p>Pickup Location: {ticket?.pickupLocation.name}</p>
           <p>Dropoff Location: {ticket?.dropoffLocation.name}</p>
           <p>
             Seats:{" "}
-            {ticket?.seats?.map((seat) => seat.seatCode).join(", ") ||
-              "No seat"}
+            {ticket?.seats?.map((seat) => seat.seatCode).join(", ") || "No seat"}
           </p>
         </div>
       ),
@@ -146,6 +138,21 @@ const Ticket = () => {
       title: "Id",
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: "User ID",
+      key: "userId",
+      render: (ticket) => ticket?.user?.id || "No user",
+    },
+    {
+      title: "Trip ID",
+      key: "tripId",
+      render: (ticket) => ticket?.trip?.id || "No trip",
+    },
+    {
+      title: "Bus ID",
+      dataIndex: "busSelectedId",
+      key: "busSelectedId",
     },
     {
       title: "Price",
@@ -165,25 +172,10 @@ const Ticket = () => {
       render: (status) => (status ? "Active" : "Inactive"),
     },
     {
-      title: "Creation Date", // Thêm cột Creation Date
+      title: "Creation Date",
       dataIndex: "creationDate",
       key: "creationDate",
-      render: (text) => moment(text).format("YYYY-MM-DD"), // Định dạng ngày
-    },
-    {
-      title: "User ID",
-      key: "userId",
-      render: (ticket) => ticket?.user?.id || "No user",
-    },
-    {
-      title: "Trip ID",
-      key: "tripId",
-      render: (ticket) => ticket?.trip?.id || "No trip",
-    },
-    {
-      title: "Bus ID",
-      dataIndex: "busSelectedId",
-      key: "busSelectedId",
+      render: (text) => moment(text).format("YYYY-MM-DD"),
     },
     {
       title: "Pickup Location",
@@ -192,18 +184,14 @@ const Ticket = () => {
     },
     {
       title: "Dropoff Location",
-      key: "dropoffLocation",
-      render: (ticket) =>
-        ticket?.dropoffLocation?.name || "No dropoff location",
+      render: (ticket) => ticket?.dropoffLocation?.name || "No dropoff location",
     },
     {
       title: "Seat Codes",
       dataIndex: "seats",
       key: "seatCodes",
-      render: (seats) =>
-        seats?.map((seat) => seat.seatCode).join(", ") || "No seat",
+      render: (seats) => seats?.map((seat) => seat.seatCode).join(", ") || "No seat",
     },
-
     {
       title: "Action",
       key: "action",
@@ -213,7 +201,7 @@ const Ticket = () => {
             icon={<EyeOutlined />}
             onClick={() => openReadModal(ticket)}
             style={{ marginRight: 8 }}
-          ></Button>
+          />
           <Button
             icon={<EditOutlined />}
             onClick={() => openEditModal(ticket)}
@@ -224,7 +212,7 @@ const Ticket = () => {
             icon={<DeleteOutlined />}
             danger
             onClick={() => handleDeleteTicket(ticket.id)}
-          ></Button>
+          />
         </div>
       ),
     },
@@ -305,7 +293,7 @@ const Ticket = () => {
             </Select>
           </Form.Item>
           <Form.Item name="seatIds" label="Seats">
-            <Select mode="multiple">
+            <Select mode="multiple" onChange={setSeatsOfTicket}>
               {seats.map((seat) => (
                 <Option key={seat.id} value={seat.id}>
                   {seat.seatCode}
@@ -315,7 +303,7 @@ const Ticket = () => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={isLoading}>
-              Save Ticket
+              Submit
             </Button>
           </Form.Item>
         </Form>
@@ -384,7 +372,7 @@ const Ticket = () => {
             </Select>
           </Form.Item>
           <Form.Item name="seatIds" label="Seats">
-            <Select mode="multiple">
+            <Select mode="multiple" onChange={setSeatsOfTicket}>
               {seatsOfTicket.map((seat) => (
                 <Option key={seat.id} value={seat.id}>
                   {seat.seatCode}
@@ -393,8 +381,8 @@ const Ticket = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Save Changes
+            <Button type="primary" htmlType="submit" loading={isLoading}>
+              Update
             </Button>
           </Form.Item>
         </Form>

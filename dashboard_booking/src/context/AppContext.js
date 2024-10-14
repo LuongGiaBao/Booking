@@ -6,6 +6,7 @@ import { getAllDropoffLocations } from "../services/dropoffLocation";
 import { getAllTrips } from "../services/trip";
 import { getAllSeats } from "../services/seat";
 import { getAllTickets } from "../services/ticket";
+import { getAllPromotions } from "../services/promotion"; // Add this line
 
 const AppContext = createContext();
 
@@ -17,6 +18,7 @@ export const AppProvider = ({ children }) => {
   const [trips, setTrips] = useState([]);
   const [seats, setSeats] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [promotions, setPromotions] = useState([]); // Add this line
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export const AppProvider = ({ children }) => {
               tripData,
               seatData,
               ticketData,
+              promotionData, // Add this line
             ] = await Promise.all([
               getAllUsers(),
               getAllBuses(),
@@ -42,6 +45,7 @@ export const AppProvider = ({ children }) => {
               getAllTrips(),
               getAllSeats(),
               getAllTickets(),
+              getAllPromotions(), // Add this line
             ]);
 
             setUsers(userData);
@@ -51,6 +55,7 @@ export const AppProvider = ({ children }) => {
             setTrips(tripData);
             setSeats(seatData);
             setTickets(ticketData);
+            setPromotions(promotionData); // Add this line
           }
         } catch (error) {
           localStorage.removeItem("token");
@@ -73,6 +78,7 @@ export const AppProvider = ({ children }) => {
         trips,
         seats,
         tickets,
+        promotions, // Add this line
         setUsers,
         setBuses,
         setPickupLocations,
@@ -80,6 +86,7 @@ export const AppProvider = ({ children }) => {
         setTrips,
         setSeats,
         setTickets,
+        setPromotions, // Add this line
         setToken,
       }}
     >
