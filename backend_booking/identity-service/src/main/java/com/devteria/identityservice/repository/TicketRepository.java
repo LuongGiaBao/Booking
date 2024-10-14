@@ -9,7 +9,6 @@ import java.util.Optional;
 
 
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket,Integer> {
-    Optional<Ticket> findById(Integer ticketId);
+public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     boolean existsById(Integer ticketId);
 }
