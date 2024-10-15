@@ -3,16 +3,9 @@ package com.devteria.identityservice.controller;
 
 import com.devteria.identityservice.dto.request.*;
 import com.devteria.identityservice.dto.response.TripResponse;
-import com.devteria.identityservice.dto.response.TripResponse;
-import com.devteria.identityservice.entity.Bus;
-import com.devteria.identityservice.entity.Ticket;
 import com.devteria.identityservice.entity.Trip;
-import com.devteria.identityservice.repository.BusRepository;
-import com.devteria.identityservice.repository.TripRepository;
-import com.devteria.identityservice.service.BusService;
 import com.devteria.identityservice.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,10 +1,7 @@
 package com.devteria.identityservice.dto.request;
 
-import com.devteria.identityservice.entity.Seat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

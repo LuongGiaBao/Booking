@@ -2,12 +2,9 @@ package com.devteria.identityservice.controller;
 
 
 import com.devteria.identityservice.dto.request.ApiResponse;
-import com.devteria.identityservice.dto.request.BusCreationRequest;
 import com.devteria.identityservice.dto.request.TicketCreationRequest;
 import com.devteria.identityservice.dto.request.TicketUpdateRequest;
 import com.devteria.identityservice.dto.response.TicketResponse;
-import com.devteria.identityservice.dto.response.TicketResponse;
-import com.devteria.identityservice.entity.Bus;
 import com.devteria.identityservice.entity.Ticket;
 import com.devteria.identityservice.service.TicketService;
 import lombok.AccessLevel;

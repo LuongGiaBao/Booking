@@ -1,7 +1,5 @@
 package com.devteria.identityservice.dto.response;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

@@ -1,14 +1,11 @@
 package com.devteria.identityservice.dto.response;
 
-import com.devteria.identityservice.entity.Bus;
-import com.devteria.identityservice.entity.Ticket;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor

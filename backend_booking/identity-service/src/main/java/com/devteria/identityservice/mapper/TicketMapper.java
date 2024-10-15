@@ -1,16 +1,11 @@
 package com.devteria.identityservice.mapper;
 
 
-import com.devteria.identityservice.dto.request.BusUpdateRequest;
 import com.devteria.identityservice.dto.request.TicketCreationRequest;
 import com.devteria.identityservice.dto.request.TicketUpdateRequest;
-import com.devteria.identityservice.dto.response.DropoffLocationResponse;
-import com.devteria.identityservice.dto.response.PickupLocationResponse;
 import com.devteria.identityservice.dto.response.TicketResponse;
-import com.devteria.identityservice.dto.response.UserResponse;
-import com.devteria.identityservice.entity.*;
+import com.devteria.identityservice.entity.Ticket;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")

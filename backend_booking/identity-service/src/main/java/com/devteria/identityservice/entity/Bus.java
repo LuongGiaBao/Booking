@@ -1,16 +1,10 @@
 package com.devteria.identityservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "buses")
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

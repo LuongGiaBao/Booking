@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PromotionUpdateRequest {
-//    Long id;
+    //    Long id;
     String name;
     String description;
     Double discount;

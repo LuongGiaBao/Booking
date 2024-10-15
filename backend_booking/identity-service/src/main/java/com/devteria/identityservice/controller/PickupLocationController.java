@@ -5,15 +5,12 @@ import com.devteria.identityservice.dto.request.ApiResponse;
 import com.devteria.identityservice.dto.request.PickupLocationCreationRequest;
 import com.devteria.identityservice.dto.request.PickupLocationUpdateRequest;
 import com.devteria.identityservice.dto.response.PickupLocationResponse;
-import com.devteria.identityservice.dto.response.PickupLocationResponse;
-import com.devteria.identityservice.entity.PickupLocation;
 import com.devteria.identityservice.entity.PickupLocation;
 import com.devteria.identityservice.service.PickupLocationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

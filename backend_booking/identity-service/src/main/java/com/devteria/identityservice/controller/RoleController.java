@@ -1,18 +1,16 @@
 package com.devteria.identityservice.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.devteria.identityservice.dto.request.ApiResponse;
 import com.devteria.identityservice.dto.request.RoleRequest;
 import com.devteria.identityservice.dto.response.RoleResponse;
 import com.devteria.identityservice.service.RoleService;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/roles")

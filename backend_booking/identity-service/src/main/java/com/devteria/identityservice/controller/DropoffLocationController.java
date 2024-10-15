@@ -7,7 +7,6 @@ import com.devteria.identityservice.dto.request.DropoffLocationUpdateRequest;
 import com.devteria.identityservice.dto.response.DropoffLocationResponse;
 import com.devteria.identityservice.entity.DropoffLocation;
 import com.devteria.identityservice.service.DropoffLocationService;
-import com.devteria.identityservice.service.DropoffLocationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

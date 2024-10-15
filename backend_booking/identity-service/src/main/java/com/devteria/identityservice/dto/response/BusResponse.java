@@ -1,7 +1,6 @@
 package com.devteria.identityservice.dto.response;
 
 
-import com.devteria.identityservice.entity.Seat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

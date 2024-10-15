@@ -3,6 +3,7 @@ package com.devteria.identityservice.mapper;
 
 import com.devteria.identityservice.dto.request.TripCreationRequest;
 import com.devteria.identityservice.dto.request.TripUpdateRequest;
+import com.devteria.identityservice.dto.response.TripResponse;
 import com.devteria.identityservice.entity.Trip;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -15,7 +16,7 @@ public interface TripMapper {
 //    @Mapping(source = "trip.pickupLocations", target = "pickupLocations")
 //    @Mapping(source = "trip.dropoffLocations", target = "dropoffLocations")
 //    @Mapping(source = "trip.buses", target = "buses")
-    TripCreationRequest toTripResponse(Trip trip);
+    TripResponse toTripResponse(Trip trip);
 
     void updateTrip(@MappingTarget Trip trip, TripUpdateRequest request);
 
